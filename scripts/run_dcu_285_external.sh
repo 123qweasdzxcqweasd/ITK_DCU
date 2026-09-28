@@ -6,7 +6,8 @@ OFF_BUILD="${OFF_BUILD:-$ROOT/build-mixed-off/test}"
 ON_BUILD="${ON_BUILD:-$ROOT/build-mixed-on/test}"
 RESULT_ROOT="${RESULT_ROOT:-$ROOT/test-results/dcu-285-external}"
 MANIFEST="${MANIFEST:-$(cd "$(dirname "$0")/.." && pwd)/manifests/dcu_285_test_manifest.tsv}"
-DATA_ROOT="${DATA_ROOT:-$ROOT/test-data/dcu-285}"
+DATA_ROOT="${DATA_ROOT:-$ROOT/data}"
+DATA_VALIDATOR="${DATA_VALIDATOR:-$ROOT/scripts/verify_dcu_dataset.py}"
 DTK_ROOT="${DTK_ROOT:-/public/software/compiler/dtk-24.04.3}"
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-600}"
 MODE="${1:-all}"
@@ -15,6 +16,8 @@ export PATH="$DTK_ROOT/bin:$DTK_ROOT/llvm/bin:$DTK_ROOT/hip/bin:/opt/hyhal/bin:/
 export LD_LIBRARY_PATH="$ROOT/build-phase2/itk-gcc/lib:$DTK_ROOT/lib64:$DTK_ROOT/lib:$DTK_ROOT/hip/lib:$DTK_ROOT/llvm/lib:$DTK_ROOT/hsa/lib:$DTK_ROOT/.hyhal/lib:$DTK_ROOT/.hyhal/hsa/lib:/opt/hyhal/lib:/opt/hyhal/lib64:${LD_LIBRARY_PATH:-}"
 export ITK_HIP_FORBID_FALLBACK=1
 export ITK_HIP_TRACE="${ITK_HIP_TRACE:-1}"
+export ITK_DCU_DATA_ROOT="$DATA_ROOT"
+export ITK_DCU_COMMON_DATA_ROOT="$DATA_ROOT/common"
 
 if [[ "$OFF_BUILD" == "$ON_BUILD" && "${ALLOW_SAME_BUILD:-0}" != 1 ]]; then
   echo "OFF_BUILD and ON_BUILD must be different for external acceptance; set ALLOW_SAME_BUILD=1 only for a smoke test." >&2
@@ -22,6 +25,9 @@ if [[ "$OFF_BUILD" == "$ON_BUILD" && "${ALLOW_SAME_BUILD:-0}" != 1 ]]; then
 fi
 
 mkdir -p "$RESULT_ROOT" "$DATA_ROOT"
+if [[ "${SKIP_DATA_VERIFY:-0}" != 1 && -f "$DATA_VALIDATOR" ]]; then
+  python3 "$DATA_VALIDATOR" "$DATA_ROOT"
+fi
 if [[ ! -f "$DATA_ROOT/dataset_manifest.tsv" ]]; then
   python3 "$(cd "$(dirname "$0")" && pwd)/generate_dcu_285_data.py" "$DATA_ROOT"
 fi
@@ -32,6 +38,9 @@ if [[ ! -f "$MANIFEST" ]]; then
 fi
 cp "$MANIFEST" "$RESULT_ROOT/dcu_285_test_manifest.tsv"
 cp "$DATA_ROOT/dataset_manifest.tsv" "$RESULT_ROOT/dataset_manifest.tsv"
+if [[ -f "$DATA_ROOT/alignment_report.tsv" ]]; then
+  cp "$DATA_ROOT/alignment_report.tsv" "$RESULT_ROOT/alignment_report.tsv"
+fi
 
 run_mode() {
   local mode="$1"

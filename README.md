@@ -48,7 +48,10 @@ ITK_HIP_FORBID_FALLBACK=1
 
 ## 数据和测试入口
 
-根目录 `data/` 是两版共享的确定性数据。两版的函数清单和结果目录独立。
+根目录 `data/common/` 是 ARM/DCU 两个平台共用的标准图像数据；
+`data/dcu_legacy/` 保留 DCU 原有的 MHA/CSV 结构化数据。根目录下的 6 个
+PNG 是当前可执行程序的兼容路径副本，已与 `data/common/` 按 SHA-256 对齐。
+两版的函数清单和结果目录独立。
 测试程序按 ITK 模块组织，不是每个函数一个二进制；脚本运行模块级
 benchmark/correctness 入口，汇总脚本根据 `UNIFIED_METRIC function=...`
 按函数提取结果。

@@ -5,7 +5,8 @@ ROOT="${ROOT:-$HOME/yyb}"
 OFF_TEST_BUILD="${OFF_TEST_BUILD:-$ROOT/build-test-port-baseline-584}"
 ON_TEST_BUILD="${ON_TEST_BUILD:-$ROOT/build-test-mixed-precision-157}"
 RESULT_ROOT="${RESULT_ROOT:-$ROOT/results/itk-mixed-precision-157}"
-DATA_ROOT="${DATA_ROOT:-$ROOT/test-data/mixed-precision-244}"
+DATA_ROOT="${DATA_ROOT:-$ROOT/data}"
+DATA_VALIDATOR="${DATA_VALIDATOR:-$ROOT/scripts/verify_dcu_dataset.py}"
 MANIFEST="${MANIFEST:-$(cd "$(dirname "$0")/.." && pwd)/manifests/itk_mixed_precision_157.tsv}"
 INVENTORY="${INVENTORY:-$(cd "$(dirname "$0")/.." && pwd)/manifests/benchmark_inventory.tsv}"
 DTK_ROOT="${DTK_ROOT:-/public/software/compiler/dtk-24.04.3}"
@@ -20,11 +21,19 @@ export PATH="$DTK_ROOT/bin:$DTK_ROOT/llvm/bin:$DTK_ROOT/hip/bin:$PATH"
 export LD_LIBRARY_PATH="$ROOT/build-itk-port-baseline-584/lib:$ROOT/build-itk-mixed-precision-157/lib:$DTK_ROOT/lib64:$DTK_ROOT/lib:$DTK_ROOT/hip/lib:$DTK_ROOT/hsa/lib:$DTK_ROOT/.hyhal/lib:$DTK_ROOT/.hyhal/hsa/lib:${LD_LIBRARY_PATH:-}"
 export ITK_HIP_FORBID_FALLBACK=1
 export ITK_HIP_TRACE="${ITK_HIP_TRACE:-1}"
+export ITK_DCU_DATA_ROOT="$DATA_ROOT"
+export ITK_DCU_COMMON_DATA_ROOT="$DATA_ROOT/common"
 
 mkdir -p "$RESULT_ROOT/OFF" "$RESULT_ROOT/ON"
+if [[ "${SKIP_DATA_VERIFY:-0}" != 1 ]]; then
+  python3 "$DATA_VALIDATOR" "$DATA_ROOT"
+fi
 cp "$MANIFEST" "$RESULT_ROOT/itk_mixed_precision_157.tsv"
 if [[ -f "$DATA_ROOT/dataset_manifest.tsv" ]]; then
   cp "$DATA_ROOT/dataset_manifest.tsv" "$RESULT_ROOT/dataset_manifest.tsv"
+fi
+if [[ -f "$DATA_ROOT/alignment_report.tsv" ]]; then
+  cp "$DATA_ROOT/alignment_report.tsv" "$RESULT_ROOT/alignment_report.tsv"
 fi
 
 run_mode() {

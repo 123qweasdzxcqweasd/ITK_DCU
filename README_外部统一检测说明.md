@@ -61,7 +61,24 @@ ITK 官方示例图像或业务图像属于可选的代表性验证层。送测�
 
 ### 本包提供的文件化复核数据
 
-`data/` 中提供由 `scripts/generate_dcu_285_data.py` 生成的确定性数据文件：
+`data/common/` 提供与 ARM 平台完全对齐的 ITK 5.4 图像数据；根目录下的
+6 个同名 PNG 是当前 DCU 入口的兼容路径副本。`data/alignment_report.tsv`
+记录 ARM/DCU 文件哈希和尺寸核对结果。
+
+共用主测文件为：
+
+- `BrainProtonDensitySlice.png`
+- `BrainProtonDensitySliceBorder20.png`
+- `BrainProtonDensitySliceShifted13x17y.png`
+- `BrainProtonDensity1024.png`
+- `BrainProtonDensity1024_fixed.png`
+- `BrainProtonDensity1024_moving.png`
+
+另外提供 `BrainProtonDensitySliceBorder20Mask.png` 和
+`BrainProtonDensitySlice256x256.png` 两个 ARM 补充输入。
+
+`data/dcu_legacy/` 及根目录兼容路径还保留由
+`scripts/generate_dcu_285_data.py` 生成的确定性结构化数据文件：
 
 - `scalar_f32.mha`：1024×1024，float32；
 - `scalar_f64.mha`：1024×1024，float64；
@@ -74,10 +91,13 @@ ITK 官方示例图像或业务图像属于可选的代表性验证层。送测�
 - `rgb_u8.mha`：1024×1024 RGB 数据；
 - `tensor6_f32.mha`：256×256×32 六分量张量数据；
 - `pointset_2d.csv`：4096 个二维点；
-- `dataset_manifest.tsv`：数据类型、尺寸、生成模式和文件名。
+- `dataset_manifest.tsv`：数据类型、尺寸、来源、角色和 SHA-256；
+- `alignment_report.tsv`：ARM/DCU 数据对齐结果；
+- `sha256sums.txt`：共用数据和兼容路径的哈希清单。
 
-这些文件用于 `package_file:<文件名>` 场景和 file-driven benchmark。送测单位
-应按 `dataset_manifest.tsv` 校验文件属性，并在结果中保留实际使用的文件名、
+共用 PNG 用于 `package_file:<文件名>` 的二维主测场景；MHA/CSV 用于三维、
+向量、复数、张量、点集等结构化对象的文件化复核。送测单位应按
+`dataset_manifest.tsv` 校验文件属性，并在结果中保留实际使用的文件名、
 尺寸、像素类型和 SHA-256。
 
 ## 3. 测试方法
@@ -161,7 +181,7 @@ export DTK_ROOT=/public/software/compiler/dtk-24.04.3
 export OFF_BUILD=/public/home/acmcs42wxa/yyb/build-mixed-off/test
 export ON_BUILD=/public/home/acmcs42wxa/yyb/build-mixed-on/test
 export RESULT_ROOT=/public/home/acmcs42wxa/yyb/test-results/dcu-285-external
-export DATA_ROOT=/public/home/acmcs42wxa/yyb/test-data/dcu-285
+export DATA_ROOT=/public/home/acmcs42wxa/yyb/data
 ```
 
 如果外部单位需要重新构建测试程序，应先得到两个不同的测试构建目录：

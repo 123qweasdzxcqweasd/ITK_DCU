@@ -35,6 +35,10 @@ results/                              运行结果
 `internal_deterministic` 表示按清单固定公式、类型、尺寸和参数生成，
 `package_file:<文件名>` 表示读取随包文件。不同输入源的结果分别汇总。
 
+运行脚本默认使用 `$ROOT/data`，启动前校验 `data/common/` 的 ARM/DCU
+共用图像和根目录兼容副本；如需指定其他数据目录，设置 `DATA_ROOT`，
+并同时提供 `DATA_ROOT/dataset_manifest.tsv`。
+
 ## 运行
 
 ```bash

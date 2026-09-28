@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """Generate deterministic MetaImage inputs for the 244-function DCU test scope."""
 
-from __future__ import annotations
-
 import argparse
 import array
 import csv
+import hashlib
 import math
 import struct
 import sys
 from pathlib import Path
+from typing import Tuple
 
 
-def write_mha(path: Path, dims: tuple[int, ...], values, element_type: str, channels: int = 1) -> None:
+def write_mha(path: Path, dims: Tuple[int, ...], values, element_type: str, channels: int = 1) -> None:
     values = list(values)
     if element_type == "MET_FLOAT":
         packed = array.array("f", values)
@@ -48,6 +48,14 @@ def write_mha(path: Path, dims: tuple[int, ...], values, element_type: str, chan
     with path.open("wb") as handle:
         handle.write(("\n".join(header) + "\n").encode("ascii"))
         handle.write(packed.tobytes())
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def scalar_values(width: int, height: int, variant: int):
@@ -137,19 +145,45 @@ def main() -> int:
             writer.writerow([i, 256.0 + 200.0 * math.cos(angle),
                              256.0 + 150.0 * math.sin(angle), 0.5 + i / 4096.0])
 
+    rows = [
+        ("scalar_f32", "scalar_f32.mha", f"{w}x{h}", "float32", "DCU deterministic generator", "analytic-v0"),
+        ("scalar_f64", "scalar_f64.mha", f"{w}x{h}", "double", "DCU deterministic generator", "analytic-v0"),
+        ("scalar_signed_f32", "scalar_signed_f32.mha", f"{w}x{h}", "float32", "DCU deterministic generator", "analytic-signed"),
+        ("binary_u8", "binary_u8.mha", f"{w}x{h}", "uint8", "DCU deterministic generator", "center-disk"),
+        ("labels_u16", "labels_u16.mha", f"{w}x{h}", "uint16", "DCU deterministic generator", "block-labels"),
+        ("volume_f32", "volume_f32.mha", f"{small_w}x{small_h}x{d}", "float32", "DCU deterministic generator", "analytic-3d"),
+        ("vector3_f32", "vector3_f32.mha", f"{w}x{h}x3", "vector-float32", "DCU deterministic generator", "analytic-vector"),
+        ("complex2_f32", "complex2_f32.mha", f"{w}x{h}x2", "complex-components-float32", "DCU deterministic generator", "analytic-complex"),
+        ("rgb_u8", "rgb_u8.mha", f"{w}x{h}x3", "rgb-uint8", "DCU deterministic generator", "analytic-rgb"),
+        ("tensor6_f32", "tensor6_f32.mha", f"{small_w}x{small_h}x{d}x6", "tensor-float32", "DCU deterministic generator", "positive-definite-diagonal"),
+        ("pointset_2d", "pointset_2d.csv", "4096x2", "csv", "DCU deterministic generator", "parametric-ring"),
+    ]
+    common_specs = [
+        ("BrainProtonDensitySlice", "BrainProtonDensitySlice.png", "181x217", "uint8-palette-png", "ITK 5.4 Examples/Data official image", "source"),
+        ("BrainProtonDensitySliceBorder20", "BrainProtonDensitySliceBorder20.png", "221x257", "uint8-palette-png", "ITK 5.4 Examples/Data official fixed image", "source"),
+        ("BrainProtonDensitySliceShifted13x17y", "BrainProtonDensitySliceShifted13x17y.png", "221x257", "uint8-palette-png", "ITK 5.4 Examples/Data official moving image", "source"),
+        ("BrainProtonDensity1024", "BrainProtonDensity1024.png", "1024x1024", "uint8-gray-png", "derived from BrainProtonDensitySlice.png", "Pillow LANCZOS resize"),
+        ("BrainProtonDensity1024_fixed", "BrainProtonDensity1024_fixed.png", "1024x1024", "uint8-gray-png", "derived from BrainProtonDensitySliceBorder20.png", "Pillow LANCZOS resize"),
+        ("BrainProtonDensity1024_moving", "BrainProtonDensity1024_moving.png", "1024x1024", "uint8-gray-png", "derived from BrainProtonDensitySliceShifted13x17y.png", "Pillow LANCZOS resize"),
+        ("BrainProtonDensitySliceBorder20Mask", "BrainProtonDensitySliceBorder20Mask.png", "221x257", "uint8-binary-png", "ARM testdata supplemental mask", "source"),
+        ("BrainProtonDensitySlice256x256", "BrainProtonDensitySlice256x256.png", "214x256", "uint8-rgb-png", "ARM testdata supplemental small image", "source"),
+    ]
     with (root / "dataset_manifest.tsv").open("w", encoding="utf-8") as handle:
-        handle.write("name\tpath\tdimensions\ttype\tseed_or_pattern\n")
-        handle.write(f"scalar_f32\tscalar_f32.mha\t{w}x{h}\tfloat32\tanalytic-v0\n")
-        handle.write(f"scalar_f64\tscalar_f64.mha\t{w}x{h}\tdouble\tanalytic-v0\n")
-        handle.write(f"scalar_signed_f32\tscalar_signed_f32.mha\t{w}x{h}\tfloat32\tanalytic-signed\n")
-        handle.write(f"binary_u8\tbinary_u8.mha\t{w}x{h}\tuint8\tcenter-disk\n")
-        handle.write(f"labels_u16\tlabels_u16.mha\t{w}x{h}\tuint16\tblock-labels\n")
-        handle.write(f"volume_f32\tvolume_f32.mha\t{small_w}x{small_h}x{d}\tfloat32\tanalytic-3d\n")
-        handle.write(f"vector3_f32\tvector3_f32.mha\t{w}x{h}x3\tvector-float32\tanalytic-vector\n")
-        handle.write(f"complex2_f32\tcomplex2_f32.mha\t{w}x{h}x2\tcomplex-components-float32\tanalytic-complex\n")
-        handle.write(f"rgb_u8\trgb_u8.mha\t{w}x{h}x3\trgb-uint8\tanalytic-rgb\n")
-        handle.write(f"tensor6_f32\ttensor6_f32.mha\t{small_w}x{small_h}x{d}x6\ttensor-float32\tpositive-definite-diagonal\n")
-        handle.write(f"pointset_2d\tpointset_2d.csv\t4096x2\tcsv\tparametric-ring\n")
+        handle.write("name\tpath\tcompatibility_path\tdimensions\ttype\tsource\tgenerator_or_pattern\trole\tsha256\n")
+        for name, path, dimensions, data_type, source, pattern in rows:
+            file_path = root / path
+            handle.write(
+                f"{name}\t{path}\t{path}\t{dimensions}\t{data_type}\t{source}\t{pattern}\tdcu_legacy\t{sha256(file_path)}\n"
+            )
+        for name, path, dimensions, data_type, source, pattern in common_specs:
+            common_path = root / "common" / path
+            if not common_path.is_file():
+                common_path = root / path
+            if common_path.is_file():
+                handle.write(
+                    f"{name}\tcommon/{path}\t{path if path in {item[1] for item in common_specs[:6]} else ''}\t"
+                    f"{dimensions}\t{data_type}\t{source}\t{pattern}\tarm_dcu_common\t{sha256(common_path)}\n"
+                )
 
     print(f"generated deterministic mixed-precision data under {root}")
     return 0
