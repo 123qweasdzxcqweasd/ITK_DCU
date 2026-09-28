@@ -63,3 +63,6 @@ python3 scripts/collect_mixed_precision_157.py \
 汇总中的 `mixed_speedup` 定义为 `OFF DCU 时间 / ON DCU 时间`，
 `mixed_error` 使用 ON 运行输出的统一误差字段。
 
+`manifests/itk_mixed_precision_157.tsv` 的 `data_source` 是送测输入契约：
+`internal_deterministic` 表示按清单固定公式、类型、尺寸和参数生成，
+`package_file:<文件名>` 表示读取随包文件。不同输入源的结果分别汇总。

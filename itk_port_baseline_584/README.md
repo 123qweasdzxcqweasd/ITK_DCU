@@ -31,6 +31,10 @@ results/                              运行结果
 抽象基类、模板接口和无独立入口的函数按清单中的代表性覆盖说明记录，
 不能把代表性结果冒充独立函数结果。
 
+`manifests/itk_port_baseline_584.tsv` 的 `data_source` 是送测输入契约：
+`internal_deterministic` 表示按清单固定公式、类型、尺寸和参数生成，
+`package_file:<文件名>` 表示读取随包文件。不同输入源的结果分别汇总。
+
 ## 运行
 
 ```bash
@@ -47,4 +51,3 @@ python3 scripts/collect_baseline_metrics.py \
 
 正式验收时必须保留 `target-status.tsv`、全部日志、清单、数据清单、
 DCU 型号、DTK 版本和 CMake 日志。
-

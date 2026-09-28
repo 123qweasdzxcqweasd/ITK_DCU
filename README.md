@@ -53,7 +53,7 @@ ITK_HIP_FORBID_FALLBACK=1
 benchmark/correctness 入口，汇总脚本根据 `UNIFIED_METRIC function=...`
 按函数提取结果。
 
-原有根目录下的 285 函数外部检测文件保留作为历史参考；正式按版本送测时，
+根目录下的 285 函数外部检测文件作为兼容检测资料保留；正式按版本送测时，
 以两个版本目录中的 README、manifest 和 scripts 为准。
 
 ## 推荐顺序
@@ -71,4 +71,3 @@ bash scripts/run_itk_mixed_precision_157.sh
 python3 scripts/collect_mixed_precision_157.py \
   "$RESULT_ROOT" "$RESULT_ROOT/itk_mixed_precision_157_summary.csv"
 ```
-
