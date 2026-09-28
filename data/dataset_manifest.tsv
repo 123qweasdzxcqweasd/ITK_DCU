@@ -1,0 +1,12 @@
+name	path	dimensions	type	seed_or_pattern
+scalar_f32	scalar_f32.mha	1024x1024	float32	analytic-v0
+scalar_f64	scalar_f64.mha	1024x1024	double	analytic-v0
+scalar_signed_f32	scalar_signed_f32.mha	1024x1024	float32	analytic-signed
+binary_u8	binary_u8.mha	1024x1024	uint8	center-disk
+labels_u16	labels_u16.mha	1024x1024	uint16	block-labels
+volume_f32	volume_f32.mha	256x256x32	float32	analytic-3d
+vector3_f32	vector3_f32.mha	1024x1024x3	vector-float32	analytic-vector
+complex2_f32	complex2_f32.mha	1024x1024x2	complex-components-float32	analytic-complex
+rgb_u8	rgb_u8.mha	1024x1024x3	rgb-uint8	analytic-rgb
+tensor6_f32	tensor6_f32.mha	256x256x32x6	tensor-float32	positive-definite-diagonal
+pointset_2d	pointset_2d.csv	4096x2	csv	parametric-ring

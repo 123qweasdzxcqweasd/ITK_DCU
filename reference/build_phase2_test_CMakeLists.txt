@@ -1,0 +1,1307 @@
+cmake_minimum_required(VERSION 3.10)
+project(ITKTest)
+
+include(CTest)
+
+find_package(ITK REQUIRED)
+include(${ITK_USE_FILE})
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(SRC_FILES src/test_banghe.cpp)
+
+add_executable(test_app ${SRC_FILES})
+target_link_libraries(test_app ${ITK_LIBRARIES})
+
+if(MSVC)
+  target_compile_options(test_app PRIVATE /std:c++17)
+endif()
+
+add_executable(hip_smoothing_test src/hip_smoothing_test.cpp)
+target_link_libraries(hip_smoothing_test ITKHipSmoothing ITKHipImageFilterBase ITKHipCommon ITKSmoothing ITKCommon)
+target_compile_definitions(hip_smoothing_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_smoothing_benchmark src/hip_smoothing_benchmark.cpp)
+target_link_libraries(hip_smoothing_benchmark ITKHipSmoothing ITKHipImageFilterBase ITKHipCommon ITKSmoothing ITKCommon)
+target_compile_definitions(hip_smoothing_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_anisotropic_smoothing_test src/hip_anisotropic_smoothing_test.cpp)
+target_link_libraries(hip_anisotropic_smoothing_test ITKHipAnisotropicSmoothing ITKHipFiniteDifference ITKHipCommon ITKCommon)
+target_compile_definitions(hip_anisotropic_smoothing_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_anisotropic_smoothing_benchmark src/hip_anisotropic_smoothing_benchmark.cpp)
+target_link_libraries(hip_anisotropic_smoothing_benchmark ITKHipAnisotropicSmoothing ITKHipFiniteDifference ITKHipCommon ITKCommon)
+target_compile_definitions(hip_anisotropic_smoothing_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_antialias_test src/hip_antialias_test.cpp)
+target_link_libraries(hip_antialias_test ITKHipAntiAlias ITKHipCommon ITKCommon)
+target_compile_definitions(hip_antialias_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_antialias_benchmark src/hip_antialias_benchmark.cpp)
+target_link_libraries(hip_antialias_benchmark ITKHipAntiAlias ITKHipCommon ITKCommon)
+target_compile_definitions(hip_antialias_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_intensity_test src/hip_image_intensity_test.cpp)
+target_link_libraries(hip_image_intensity_test ${ITK_LIBRARIES})
+target_compile_definitions(hip_image_intensity_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_intensity_benchmark src/hip_image_intensity_benchmark.cpp)
+target_link_libraries(hip_image_intensity_benchmark ${ITK_LIBRARIES})
+target_compile_definitions(hip_image_intensity_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_intensity_all_filters_test src/hip_image_intensity_all_filters_test.cpp)
+target_link_libraries(hip_image_intensity_all_filters_test ${ITK_LIBRARIES})
+target_compile_definitions(hip_image_intensity_all_filters_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_thresholding_test src/hip_thresholding_test.cpp)
+target_link_libraries(hip_thresholding_test ${ITK_LIBRARIES})
+target_compile_definitions(hip_thresholding_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_thresholding_benchmark src/hip_thresholding_benchmark.cpp)
+target_link_libraries(hip_thresholding_benchmark ${ITK_LIBRARIES})
+target_compile_definitions(hip_thresholding_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_sources_test src/hip_image_sources_test.cpp)
+target_link_libraries(hip_image_sources_test ${ITK_LIBRARIES})
+target_compile_definitions(hip_image_sources_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_sources_benchmark src/hip_image_sources_benchmark.cpp)
+target_link_libraries(hip_image_sources_benchmark ${ITK_LIBRARIES})
+target_compile_definitions(hip_image_sources_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_colormap_test src/hip_colormap_test.cpp)
+target_link_libraries(hip_colormap_test ${ITK_LIBRARIES})
+target_compile_definitions(hip_colormap_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_colormap_benchmark src/hip_colormap_benchmark.cpp)
+target_link_libraries(hip_colormap_benchmark ${ITK_LIBRARIES})
+target_compile_definitions(hip_colormap_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_compose_test src/hip_image_compose_test.cpp)
+target_link_libraries(hip_image_compose_test ITKHipImageCompose ITKHipCommon ITKCommon)
+target_compile_definitions(hip_image_compose_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_compose_benchmark src/hip_image_compose_benchmark.cpp)
+target_link_libraries(hip_image_compose_benchmark ITKHipImageCompose ITKHipCommon ITKCommon)
+target_compile_definitions(hip_image_compose_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_statistics_test src/hip_image_statistics_test.cpp)
+target_link_libraries(hip_image_statistics_test ITKHipImageStatistics ITKHipCommon ITKStatistics ITKCommon)
+target_compile_definitions(hip_image_statistics_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_statistics_benchmark src/hip_image_statistics_benchmark.cpp)
+target_link_libraries(hip_image_statistics_benchmark ITKHipImageStatistics ITKHipCommon ITKStatistics ITKCommon)
+target_compile_definitions(hip_image_statistics_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_compare_test src/hip_image_compare_test.cpp)
+target_link_libraries(hip_image_compare_test ITKHipImageCompare ITKHipCommon ITKCommon)
+target_compile_definitions(hip_image_compare_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_compare_benchmark src/hip_image_compare_benchmark.cpp)
+target_link_libraries(hip_image_compare_benchmark ITKHipImageCompare ITKHipCommon ITKCommon)
+target_compile_definitions(hip_image_compare_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(precision_17_benchmark src/precision_17_benchmark.cpp)
+target_link_libraries(precision_17_benchmark ${ITK_LIBRARIES})
+target_compile_definitions(precision_17_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(precision_remaining_benchmark src/precision_remaining_benchmark.cpp)
+target_link_libraries(precision_remaining_benchmark ${ITK_LIBRARIES})
+target_compile_definitions(precision_remaining_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_cpu_fallback_backend_test src/hip_cpu_fallback_backend_test.cpp)
+target_link_libraries(hip_cpu_fallback_backend_test
+  ITKHipCommon
+  ITKCommon
+)
+target_compile_definitions(hip_cpu_fallback_backend_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_custom_target(run
+  COMMAND test_app
+  DEPENDS test_app
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_segmentation_labels_test src/hip_segmentation_labels_test.cpp)
+target_link_libraries(hip_segmentation_labels_test ITKHipSegmentation ITKHipCommon ITKCommon)
+target_compile_definitions(hip_segmentation_labels_test PRIVATE __HIP_PLATFORM_AMD__)
+add_test(NAME hip_segmentation_labels_strict COMMAND hip_segmentation_labels_test)
+set_tests_properties(hip_segmentation_labels_strict PROPERTIES
+  ENVIRONMENT "ITK_HIP_FORBID_FALLBACK=1;ITK_HIP_TRACE=1")
+
+add_executable(hip_segmentation_evolution_test src/hip_segmentation_evolution_test.cpp)
+target_link_libraries(hip_segmentation_evolution_test ITKHipSegmentation ITKHipCommon ITKCommon)
+target_compile_definitions(hip_segmentation_evolution_test PRIVATE __HIP_PLATFORM_AMD__)
+add_test(NAME hip_segmentation_evolution_strict COMMAND hip_segmentation_evolution_test)
+set_tests_properties(hip_segmentation_evolution_strict PROPERTIES
+  ENVIRONMENT "ITK_HIP_FORBID_FALLBACK=1;ITK_HIP_TRACE=1")
+
+add_executable(hip_registration_test src/hip_registration_test.cpp)
+target_link_libraries(hip_registration_test ITKHipRegistration ITKHipCommon ITKCommon)
+target_compile_definitions(hip_registration_test PRIVATE __HIP_PLATFORM_AMD__)
+add_test(NAME hip_registration_strict COMMAND hip_registration_test)
+set_tests_properties(hip_registration_strict PROPERTIES
+  ENVIRONMENT "ITK_HIP_FORBID_FALLBACK=1;ITK_HIP_TRACE=1")
+
+add_custom_target(run_hip_smoothing
+  COMMAND hip_smoothing_test
+  DEPENDS hip_smoothing_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_smoothing_benchmark
+  COMMAND hip_smoothing_benchmark
+  DEPENDS hip_smoothing_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_anisotropic_smoothing
+  COMMAND hip_anisotropic_smoothing_test
+  DEPENDS hip_anisotropic_smoothing_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_anisotropic_smoothing_benchmark
+  COMMAND hip_anisotropic_smoothing_benchmark
+  DEPENDS hip_anisotropic_smoothing_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_antialias
+  COMMAND hip_antialias_test
+  DEPENDS hip_antialias_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_antialias_benchmark
+  COMMAND hip_antialias_benchmark
+  DEPENDS hip_antialias_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_intensity
+  COMMAND hip_image_intensity_test
+  DEPENDS hip_image_intensity_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_intensity_benchmark
+  COMMAND hip_image_intensity_benchmark
+  DEPENDS hip_image_intensity_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_intensity_all_filters
+  COMMAND hip_image_intensity_all_filters_test
+  DEPENDS hip_image_intensity_all_filters_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_thresholding
+  COMMAND hip_thresholding_test
+  DEPENDS hip_thresholding_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_thresholding_benchmark
+  COMMAND hip_thresholding_benchmark
+  DEPENDS hip_thresholding_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_sources
+  COMMAND hip_image_sources_test
+  DEPENDS hip_image_sources_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_sources_benchmark
+  COMMAND hip_image_sources_benchmark
+  DEPENDS hip_image_sources_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_colormap
+  COMMAND hip_colormap_test
+  DEPENDS hip_colormap_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_colormap_benchmark
+  COMMAND hip_colormap_benchmark
+  DEPENDS hip_colormap_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_compose
+  COMMAND hip_image_compose_test
+  DEPENDS hip_image_compose_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_compose_benchmark
+  COMMAND hip_image_compose_benchmark
+  DEPENDS hip_image_compose_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_statistics
+  COMMAND hip_image_statistics_test
+  DEPENDS hip_image_statistics_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_statistics_benchmark
+  COMMAND hip_image_statistics_benchmark
+  DEPENDS hip_image_statistics_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_compare
+  COMMAND hip_image_compare_test
+  DEPENDS hip_image_compare_test
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(run_hip_image_compare_benchmark
+  COMMAND hip_image_compare_benchmark
+  DEPENDS hip_image_compare_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(clean-all
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/test_app
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_smoothing_test
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_smoothing_benchmark
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_anisotropic_smoothing_test
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_anisotropic_smoothing_benchmark
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_antialias_test
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_antialias_benchmark
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_image_intensity_test
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_image_intensity_benchmark
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_thresholding_test
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_thresholding_benchmark
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_image_sources_test
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_image_sources_benchmark
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_colormap_test
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_colormap_benchmark
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_image_compose_test
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_image_compose_benchmark
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_image_statistics_test
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_image_statistics_benchmark
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_image_compare_test
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/hip_image_compare_benchmark
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/*.o
+  DEPENDS test_app hip_smoothing_test hip_smoothing_benchmark hip_anisotropic_smoothing_test
+          hip_anisotropic_smoothing_benchmark hip_antialias_test hip_antialias_benchmark hip_image_intensity_test
+          hip_image_intensity_benchmark hip_thresholding_test hip_thresholding_benchmark hip_image_sources_test
+          hip_image_sources_benchmark hip_colormap_test hip_colormap_benchmark hip_image_compose_test
+          hip_image_compose_benchmark hip_image_statistics_test hip_image_statistics_benchmark hip_image_compare_test
+          hip_image_compare_benchmark
+)
+
+# HIP migrated module benchmark smoke tests
+add_executable(hip_convolution_benchmark src/hip_convolution_benchmark.cpp)
+target_link_libraries(hip_convolution_benchmark ITKHipConvolution ITKHipFFT ITKHipCommon ITKConvolution ITKFFT ITKCommon)
+target_compile_definitions(hip_convolution_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_convolution_fp32_compare src/hip_convolution_fp32_compare.cpp)
+target_link_libraries(hip_convolution_fp32_compare ITKHipConvolution ITKHipCommon ITKConvolution ITKCommon)
+target_compile_definitions(hip_convolution_fp32_compare PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_mixed_precision_test src/hip_mixed_precision_test.cpp)
+target_link_libraries(hip_mixed_precision_test ${ITK_LIBRARIES})
+target_compile_definitions(hip_mixed_precision_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_fp32_fp64_test src/hip_fp32_fp64_test.cpp)
+target_link_libraries(hip_fp32_fp64_test ${ITK_LIBRARIES})
+target_compile_definitions(hip_fp32_fp64_test PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_convolution_benchmark
+  COMMAND hip_convolution_benchmark
+  DEPENDS hip_convolution_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_curvature_flow_benchmark src/hip_curvature_flow_benchmark.cpp)
+target_link_libraries(hip_curvature_flow_benchmark ${ITK_LIBRARIES})
+target_compile_definitions(hip_curvature_flow_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_curvature_flow_benchmark
+  COMMAND hip_curvature_flow_benchmark
+  DEPENDS hip_curvature_flow_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_deconvolution_benchmark src/hip_deconvolution_benchmark.cpp)
+target_link_libraries(hip_deconvolution_benchmark ITKHipDeconvolution ITKHipFFT ITKHipCommon ITKConvolution ITKFFT ITKCommon)
+target_compile_definitions(hip_deconvolution_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_deconvolution_benchmark
+  COMMAND hip_deconvolution_benchmark
+  DEPENDS hip_deconvolution_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_denoising_benchmark src/hip_denoising_benchmark.cpp)
+target_link_libraries(hip_denoising_benchmark ITKHipDenoising ITKHipCommon ITKDenoising ITKDiffusionTensorImage ITKStatistics ITKTransform ITKCommon)
+target_compile_definitions(hip_denoising_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_denoising_benchmark
+  COMMAND hip_denoising_benchmark
+  DEPENDS hip_denoising_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_diffusion_tensor_image_benchmark src/hip_diffusion_tensor_image_benchmark.cpp)
+target_link_libraries(hip_diffusion_tensor_image_benchmark ITKHipDiffusionTensorImage ITKHipCommon ITKDiffusionTensorImage ITKSpatialObjects ITKTransform ITKCommon)
+target_compile_definitions(hip_diffusion_tensor_image_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_diffusion_tensor_image_benchmark
+  COMMAND hip_diffusion_tensor_image_benchmark
+  DEPENDS hip_diffusion_tensor_image_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_displacement_field_benchmark src/hip_displacement_field_benchmark.cpp)
+target_link_libraries(hip_displacement_field_benchmark ITKHipDisplacementField ITKHipCommon ITKCommon)
+target_compile_definitions(hip_displacement_field_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_displacement_field_benchmark
+  COMMAND hip_displacement_field_benchmark
+  DEPENDS hip_displacement_field_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_distance_map_benchmark src/hip_distance_map_benchmark.cpp)
+target_link_libraries(hip_distance_map_benchmark ITKHipDistanceMap ITKHipCommon ITKCommon)
+target_compile_definitions(hip_distance_map_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_distance_map_benchmark
+  COMMAND hip_distance_map_benchmark
+  DEPENDS hip_distance_map_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_fast_marching_benchmark src/hip_fast_marching_benchmark.cpp)
+target_link_libraries(hip_fast_marching_benchmark ITKHipFastMarching ITKHipCommon ITKFastMarching ITKCommon)
+target_compile_definitions(hip_fast_marching_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_fast_marching_benchmark
+  COMMAND hip_fast_marching_benchmark
+  DEPENDS hip_fast_marching_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_fft_benchmark src/hip_fft_benchmark.cpp)
+target_link_libraries(hip_fft_benchmark ITKHipFFT ITKHipCommon ITKFFT ITKCommon)
+target_compile_definitions(hip_fft_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_fft_benchmark
+  COMMAND hip_fft_benchmark
+  DEPENDS hip_fft_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_image_fusion_benchmark src/hip_image_fusion_benchmark.cpp)
+target_link_libraries(hip_image_fusion_benchmark ITKHipImageFusion ITKHipCommon ITKLabelMap ITKCommon)
+target_compile_definitions(hip_image_fusion_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_image_fusion_benchmark
+  COMMAND hip_image_fusion_benchmark
+  DEPENDS hip_image_fusion_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_image_feature_benchmark src/hip_image_feature_benchmark.cpp)
+target_link_libraries(hip_image_feature_benchmark ITKHipImageFeature ITKHipImageFilterBase ITKHipImageIntensity ITKHipSmoothing ITKHipCommon ITKImageFeature ITKCommon)
+target_compile_definitions(hip_image_feature_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_image_feature_benchmark
+  COMMAND hip_image_feature_benchmark
+  DEPENDS hip_image_feature_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_image_label_benchmark src/hip_image_label_benchmark.cpp)
+target_link_libraries(hip_image_label_benchmark ITKHipImageLabel ITKHipCommon ITKCommon)
+target_compile_definitions(hip_image_label_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_image_label_benchmark
+  COMMAND hip_image_label_benchmark
+  DEPENDS hip_image_label_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_label_map_benchmark src/hip_label_map_benchmark.cpp)
+target_link_libraries(hip_label_map_benchmark ITKHipLabelMap ITKHipCommon ITKLabelMap ITKCommon)
+target_compile_definitions(hip_label_map_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_label_map_benchmark
+  COMMAND hip_label_map_benchmark
+  DEPENDS hip_label_map_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_mathematical_morphology_benchmark src/hip_mathematical_morphology_benchmark.cpp)
+target_link_libraries(hip_mathematical_morphology_benchmark ITKHipMathematicalMorphology ITKHipCommon ITKCommon)
+target_compile_definitions(hip_mathematical_morphology_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_mathematical_morphology_benchmark
+  COMMAND hip_mathematical_morphology_benchmark
+  DEPENDS hip_mathematical_morphology_benchmark
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_executable(hip_convolution_template_test src/hip_convolution_template_test.cpp)
+target_link_libraries(hip_convolution_template_test ITKHipConvolution ITKHipCommon ITKConvolution ITKCommon)
+target_compile_definitions(hip_convolution_template_test PRIVATE __HIP_PLATFORM_AMD__)
+add_custom_target(run_hip_convolution_template_test
+  COMMAND hip_convolution_template_test
+  DEPENDS hip_convolution_template_test
+  WORKING_DIRECTORY .
+)
+
+
+
+add_executable(hip_frequency_band_benchmark src/hip_frequency_band_benchmark.cpp)
+
+target_link_libraries(hip_frequency_band_benchmark ITKHipImageFrequency ITKHipCommon ${ITK_LIBRARIES})
+
+target_compile_definitions(hip_frequency_band_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_custom_target(run_hip_frequency_band_benchmark
+
+  COMMAND hip_frequency_band_benchmark
+
+  DEPENDS hip_frequency_band_benchmark
+
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+
+)
+
+
+
+add_executable(hip_image_frequency_test src/hip_image_frequency_test.cpp)
+
+target_link_libraries(hip_image_frequency_test ITKHipImageFrequency ITKHipCommon ${ITK_LIBRARIES})
+
+target_compile_definitions(hip_image_frequency_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_custom_target(run_hip_image_frequency_test
+
+  COMMAND hip_image_frequency_test
+
+  DEPENDS hip_image_frequency_test
+
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+
+)
+
+# Benchmarks remain buildable as a separate group, but are intentionally not
+# registered with CTest and do not participate in correctness acceptance.
+set(HIP_BENCHMARK_TARGETS
+  hip_smoothing_benchmark
+  hip_anisotropic_smoothing_benchmark
+  hip_antialias_benchmark
+  hip_image_intensity_benchmark
+  hip_thresholding_benchmark
+  hip_image_sources_benchmark
+  hip_colormap_benchmark
+  hip_image_compose_benchmark
+  hip_image_statistics_benchmark
+  hip_image_compare_benchmark
+  hip_convolution_benchmark
+  hip_curvature_flow_benchmark
+  hip_deconvolution_benchmark
+  hip_denoising_benchmark
+  hip_diffusion_tensor_image_benchmark
+  hip_displacement_field_benchmark
+  hip_distance_map_benchmark
+  hip_fast_marching_benchmark
+  hip_fft_benchmark
+  hip_image_fusion_benchmark
+  hip_image_feature_benchmark
+  hip_image_label_benchmark
+  hip_label_map_benchmark
+  hip_mathematical_morphology_benchmark
+  hip_frequency_band_benchmark
+)
+add_custom_target(hip_benchmarks DEPENDS ${HIP_BENCHMARK_TARGETS})
+
+# Aggregate module implementations are compiled into distinct correctness and
+# benchmark executables.  Stage-6 CTest registration keeps their acceptance
+# roles separate and gates every benchmark behind its correctness executable.
+function(add_phase2_correctness_variant correctness_target benchmark_target source_file)
+  add_executable(${correctness_target} ${source_file})
+  get_target_property(benchmark_link_libraries ${benchmark_target} LINK_LIBRARIES)
+  target_link_libraries(${correctness_target} ${benchmark_link_libraries})
+  target_compile_definitions(${correctness_target} PRIVATE __HIP_PLATFORM_AMD__ HIP_CORRECTNESS_MODE=1)
+endfunction()
+
+add_phase2_correctness_variant(hip_curvature_flow_correctness_test hip_curvature_flow_benchmark src/hip_curvature_flow_benchmark.cpp)
+add_phase2_correctness_variant(hip_deconvolution_correctness_test hip_deconvolution_benchmark src/hip_deconvolution_benchmark.cpp)
+add_phase2_correctness_variant(hip_denoising_correctness_test hip_denoising_benchmark src/hip_denoising_benchmark.cpp)
+add_phase2_correctness_variant(hip_diffusion_tensor_image_correctness_test hip_diffusion_tensor_image_benchmark src/hip_diffusion_tensor_image_benchmark.cpp)
+add_phase2_correctness_variant(hip_displacement_field_correctness_test hip_displacement_field_benchmark src/hip_displacement_field_benchmark.cpp)
+add_phase2_correctness_variant(hip_distance_map_correctness_test hip_distance_map_benchmark src/hip_distance_map_benchmark.cpp)
+add_phase2_correctness_variant(hip_fast_marching_correctness_test hip_fast_marching_benchmark src/hip_fast_marching_benchmark.cpp)
+add_phase2_correctness_variant(hip_fft_correctness_test hip_fft_benchmark src/hip_fft_benchmark.cpp)
+add_phase2_correctness_variant(hip_image_feature_correctness_test hip_image_feature_benchmark src/hip_image_feature_benchmark.cpp)
+add_phase2_correctness_variant(hip_image_fusion_correctness_test hip_image_fusion_benchmark src/hip_image_fusion_benchmark.cpp)
+add_phase2_correctness_variant(hip_image_label_correctness_test hip_image_label_benchmark src/hip_image_label_benchmark.cpp)
+add_phase2_correctness_variant(hip_label_map_correctness_test hip_label_map_benchmark src/hip_label_map_benchmark.cpp)
+add_phase2_correctness_variant(hip_mathematical_morphology_correctness_test hip_mathematical_morphology_benchmark src/hip_mathematical_morphology_benchmark.cpp)
+
+add_executable(hip_uncovered_modules_correctness_test src/hip_uncovered_modules_correctness_test.cpp)
+target_link_libraries(hip_uncovered_modules_correctness_test
+  ITKHipImageFilterBase
+  ITKHipImageGradient
+  ITKHipImageGrid
+  ITKHipImageNoise
+  ITKHipCommon
+  ${ITK_LIBRARIES}
+)
+target_compile_definitions(hip_uncovered_modules_correctness_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_phase3_common_test src/hip_phase3_common_test.cpp)
+target_link_libraries(hip_phase3_common_test ITKHipCommon ITKCommon ${ITK_LIBRARIES})
+target_compile_definitions(hip_phase3_common_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_phase3_algorithms_test src/hip_phase3_algorithms_test.cpp)
+target_link_libraries(hip_phase3_algorithms_test ITKHipCommon ITKCommon ${ITK_LIBRARIES})
+target_compile_definitions(hip_phase3_algorithms_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_phase4_p0_test src/hip_phase4_p0_test.cpp)
+target_link_libraries(hip_phase4_p0_test
+  ITKHipDistanceMap
+  ITKHipMathematicalMorphology
+  ITKHipImageFeature
+  ITKHipImageFrequency
+  ITKHipImageGradient
+  ITKHipSmoothing
+  ITKHipThresholding
+  ITKHipImageFilterBase
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_phase4_p0_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_stage5_fft_pipeline_test src/hip_stage5_fft_pipeline_test.cpp)
+target_link_libraries(hip_stage5_fft_pipeline_test
+  ITKHipConvolution
+  ITKHipSmoothing
+  ITKHipFFT
+  ITKHipCommon
+  ITKConvolution
+  ITKSmoothing
+  ITKFFT
+  ITKCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_stage5_fft_pipeline_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_stage5_intensity_mapping_test src/hip_stage5_intensity_mapping_test.cpp)
+target_link_libraries(hip_stage5_intensity_mapping_test
+  ITKHipImageIntensity
+  ITKHipCommon
+  ITKImageIntensity
+  ITKCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_stage5_intensity_mapping_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_stage5_intensity_extended_test src/hip_stage5_intensity_extended_test.cpp)
+target_link_libraries(hip_stage5_intensity_extended_test
+  ITKHipImageIntensity
+  ITKHipCommon
+  ITKImageIntensity
+  ITKCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_stage5_intensity_extended_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_stage5_intensity_structured_test src/hip_stage5_intensity_structured_test.cpp)
+target_link_libraries(hip_stage5_intensity_structured_test
+  ITKHipImageIntensity
+  ITKHipCommon
+  ITKImageIntensity
+  ITKCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_stage5_intensity_structured_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_intensity_remaining_benchmark src/hip_image_intensity_remaining_benchmark.cpp)
+target_link_libraries(hip_image_intensity_remaining_benchmark
+  ITKHipImageIntensity
+  ITKHipCommon
+  ITKImageIntensity
+  ITKCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_image_intensity_remaining_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_noise_benchmark src/hip_image_noise_benchmark.cpp)
+target_link_libraries(hip_image_noise_benchmark
+  ITKHipImageNoise
+  ITKHipCommon
+  ITKCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_image_noise_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+add_executable(hip_image_gradient_benchmark src/hip_image_gradient_benchmark.cpp)
+target_link_libraries(hip_image_gradient_benchmark
+  ITKHipImageGradient
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_image_gradient_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_image_grid_benchmark src/hip_image_grid_benchmark.cpp)
+target_link_libraries(hip_image_grid_benchmark
+  ITKHipImageGrid
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_image_grid_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_smoothing_extra_benchmark src/hip_smoothing_extra_benchmark.cpp)
+target_link_libraries(hip_smoothing_extra_benchmark
+  ITKHipSmoothing
+  ITKHipFFT
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_smoothing_extra_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_binary_reconstruction_benchmark src/hip_binary_reconstruction_benchmark.cpp)
+target_link_libraries(hip_binary_reconstruction_benchmark
+  ITKHipMathematicalMorphology
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_binary_reconstruction_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_hough_benchmark src/hip_hough_benchmark.cpp)
+target_link_libraries(hip_hough_benchmark
+  ITKHipImageFeature
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_hough_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_gvf_benchmark src/hip_gvf_benchmark.cpp)
+target_link_libraries(hip_gvf_benchmark
+  ITKHipImageFeature
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_gvf_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_misc_benchmark src/hip_misc_benchmark.cpp)
+target_link_libraries(hip_misc_benchmark
+  ITKHipImageGrid
+  ITKHipImageFilterBase
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_misc_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_extra_benchmark src/hip_labelmap_extra_benchmark.cpp)
+target_link_libraries(hip_labelmap_extra_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_extra_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_attr_benchmark src/hip_labelmap_attr_benchmark.cpp)
+target_link_libraries(hip_labelmap_attr_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_attr_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_shape_benchmark src/hip_labelmap_shape_benchmark.cpp)
+target_link_libraries(hip_labelmap_shape_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_shape_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_stats_benchmark src/hip_labelmap_stats_benchmark.cpp)
+target_link_libraries(hip_labelmap_stats_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_stats_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_image_benchmark src/hip_labelmap_image_benchmark.cpp)
+target_link_libraries(hip_labelmap_image_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_image_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_binary_benchmark src/hip_labelmap_binary_benchmark.cpp)
+target_link_libraries(hip_labelmap_binary_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_binary_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_convert_benchmark src/hip_labelmap_convert_benchmark.cpp)
+target_link_libraries(hip_labelmap_convert_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_convert_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_rest_benchmark src/hip_labelmap_rest_benchmark.cpp)
+target_link_libraries(hip_labelmap_rest_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_rest_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+
+add_executable(hip_labelmap_binconv_benchmark src/hip_labelmap_binconv_benchmark.cpp)
+target_link_libraries(hip_labelmap_binconv_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_binconv_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_final_benchmark src/hip_labelmap_final_benchmark.cpp)
+target_link_libraries(hip_labelmap_final_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_final_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_unique_benchmark src/hip_labelmap_unique_benchmark.cpp)
+target_link_libraries(hip_labelmap_unique_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_unique_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_registration_benchmark src/hip_registration_benchmark.cpp)
+target_link_libraries(hip_registration_benchmark
+  ITKHipRegistration
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_registration_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_segmentation_benchmark src/hip_segmentation_benchmark.cpp)
+target_link_libraries(hip_segmentation_benchmark
+  ITKHipSegmentation
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_segmentation_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_registration_common_benchmark src/hip_registration_common_benchmark.cpp)
+target_link_libraries(hip_registration_common_benchmark
+  ITKHipRegistration
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_registration_common_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_pos_benchmark src/hip_labelmap_pos_benchmark.cpp)
+target_link_libraries(hip_labelmap_pos_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_pos_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_final2_benchmark src/hip_labelmap_final2_benchmark.cpp)
+target_link_libraries(hip_labelmap_final2_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_final2_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_imagegrid3_benchmark src/hip_imagegrid3_benchmark.cpp)
+target_link_libraries(hip_imagegrid3_benchmark
+  ITKHipImageGrid
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_imagegrid3_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_registration_method_benchmark src/hip_registration_method_benchmark.cpp)
+target_link_libraries(hip_registration_method_benchmark
+  ITKHipRegistration
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_registration_method_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_registration_point_benchmark src/hip_registration_point_benchmark.cpp)
+target_link_libraries(hip_registration_point_benchmark
+  ITKHipRegistration
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_registration_point_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_final7_benchmark src/hip_final7_benchmark.cpp)
+target_link_libraries(hip_final7_benchmark
+  ITKHipRegistration
+  ITKHipImageFeature
+  ITKHipImageGrid
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_final7_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_bspline_orient_benchmark src/hip_bspline_orient_benchmark.cpp)
+target_link_libraries(hip_bspline_orient_benchmark
+  ITKHipImageGrid
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_bspline_orient_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_bspline2_benchmark src/hip_bspline2_benchmark.cpp)
+target_link_libraries(hip_bspline2_benchmark
+  ITKHipImageGrid
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_bspline2_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_labelmap_binaryrec_benchmark src/hip_labelmap_binaryrec_benchmark.cpp)
+target_link_libraries(hip_labelmap_binaryrec_benchmark
+  ITKHipLabelMap
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_labelmap_binaryrec_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_bspline_scattered_benchmark src/hip_bspline_scattered_benchmark.cpp)
+target_link_libraries(hip_bspline_scattered_benchmark
+  ITKHipImageGrid
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_bspline_scattered_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+
+
+
+
+
+
+
+
+
+add_executable(hip_registration_metricv4_benchmark src/hip_registration_metricv4_benchmark.cpp)
+target_link_libraries(hip_registration_metricv4_benchmark
+  ITKHipRegistration
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_registration_metricv4_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+
+
+
+
+
+
+
+add_executable(hip_imagegrid2_benchmark src/hip_imagegrid2_benchmark.cpp)
+target_link_libraries(hip_imagegrid2_benchmark
+  ITKHipImageGrid
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_imagegrid2_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_misc2_benchmark src/hip_misc2_benchmark.cpp)
+target_link_libraries(hip_misc2_benchmark
+  ITKHipImageGrid
+  ITKHipImageFilterBase
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_misc2_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_misc3_benchmark src/hip_misc3_benchmark.cpp)
+target_link_libraries(hip_misc3_benchmark
+  ITKHipImageFeature
+  ITKHipImageFilterBase
+  ITKHipCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_misc3_benchmark PRIVATE __HIP_PLATFORM_AMD__)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+add_executable(hip_stage5_grid_pad_test src/hip_stage5_grid_pad_test.cpp)
+target_link_libraries(hip_stage5_grid_pad_test
+  ITKHipImageGrid
+  ITKHipCommon
+  ITKCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_stage5_grid_pad_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_remaining8_real_test src/hip_remaining8_real_test.cpp)
+target_link_libraries(hip_remaining8_real_test
+  ITKHipImageGrid
+  ITKHipImageIntensity
+  ITKHipImageFilterBase
+  ITKHipCommon
+  ITKCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_remaining8_real_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_stage5_grid_orient_test src/hip_stage5_grid_orient_test.cpp)
+target_link_libraries(hip_stage5_grid_orient_test
+  ITKHipImageGrid
+  ITKHipCommon
+  ITKCommon)
+target_compile_definitions(hip_stage5_grid_orient_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_stage5_feature_composite_test src/hip_stage5_feature_composite_test.cpp)
+target_link_libraries(hip_stage5_feature_composite_test
+  ITKHipImageFeature
+  ITKHipImageFilterBase
+  ITKHipImageIntensity
+  ITKHipSmoothing
+  ITKHipCommon
+  ITKImageFeature
+  ITKCommon)
+target_compile_definitions(hip_stage5_feature_composite_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_stage5_labelmap_objects_test src/hip_stage5_labelmap_objects_test.cpp)
+target_link_libraries(hip_stage5_labelmap_objects_test
+  ITKHipLabelMap
+  ITKHipCommon
+  ITKLabelMap
+  ITKCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_stage5_labelmap_objects_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_stage5_path_contour_test src/hip_stage5_path_contour_test.cpp)
+target_link_libraries(hip_stage5_path_contour_test
+  ITKHipPath
+  ITKHipCommon
+  ITKPath
+  ITKCommon
+  ${ITK_LIBRARIES})
+target_compile_definitions(hip_stage5_path_contour_test PRIVATE __HIP_PLATFORM_AMD__)
+
+add_executable(hip_stage5_n4_test src/hip_stage5_n4_test.cpp)
+target_link_libraries(hip_stage5_n4_test
+  ITKHipBiasCorrection
+  ITKHipImageGrid
+  ITKHipCommon
+  ITKBiasCorrection
+  ITKCommon)
+target_compile_definitions(hip_stage5_n4_test PRIVATE __HIP_PLATFORM_AMD__)
+
+# Correctness executables are registered separately from benchmarks.  A run
+# without a HIP device is reported as skipped instead of silently passing.
+option(ITK_HIP_STAGE6_REGISTRATION "Use the unified stage-6 CTest registration" ON)
+set(ITK_HIP_SOURCE_ROOT "" CACHE PATH "Path to the authoritative ITK source tree for acceptance checks")
+if(BUILD_TESTING AND NOT ITK_HIP_STAGE6_REGISTRATION)
+  set(HIP_CORRECTNESS_TARGETS
+    hip_smoothing_test
+    hip_anisotropic_smoothing_test
+    hip_antialias_test
+    hip_image_intensity_test
+    hip_image_intensity_all_filters_test
+    hip_thresholding_test
+    hip_image_sources_test
+    hip_colormap_test
+    hip_image_compose_test
+    hip_image_statistics_test
+    hip_image_compare_test
+    hip_cpu_fallback_backend_test
+    hip_convolution_fp32_compare
+    hip_mixed_precision_test
+    hip_convolution_template_test
+    hip_image_frequency_test
+    hip_curvature_flow_correctness_test
+    hip_deconvolution_correctness_test
+    hip_denoising_correctness_test
+    hip_diffusion_tensor_image_correctness_test
+    hip_displacement_field_correctness_test
+    hip_distance_map_correctness_test
+    hip_fast_marching_correctness_test
+    hip_fft_correctness_test
+    hip_image_feature_correctness_test
+    hip_image_fusion_correctness_test
+    hip_image_label_correctness_test
+    hip_label_map_correctness_test
+    hip_mathematical_morphology_correctness_test
+    hip_stage5_fft_pipeline_test
+    hip_stage5_intensity_mapping_test
+    hip_stage5_intensity_extended_test
+    hip_stage5_intensity_structured_test
+    hip_stage5_grid_pad_test
+    hip_remaining8_real_test
+    hip_stage5_grid_orient_test
+    hip_stage5_feature_composite_test
+    hip_stage5_labelmap_objects_test
+    hip_stage5_path_contour_test
+    hip_stage5_n4_test
+  )
+
+  add_custom_target(hip_correctness_tests DEPENDS
+    ${HIP_CORRECTNESS_TARGETS}
+    hip_uncovered_modules_correctness_test
+    hip_phase3_common_test
+    hip_phase3_algorithms_test
+    hip_phase4_p0_test)
+
+  set(HIP_CORRECTNESS_ARGS_hip_curvature_flow_correctness_test 32 32)
+  set(HIP_CORRECTNESS_ARGS_hip_deconvolution_correctness_test 24 24)
+  set(HIP_CORRECTNESS_ARGS_hip_denoising_correctness_test 24 24)
+  set(HIP_CORRECTNESS_ARGS_hip_diffusion_tensor_image_correctness_test 16 16 1)
+  set(HIP_CORRECTNESS_ARGS_hip_displacement_field_correctness_test 24 20 1)
+  set(HIP_CORRECTNESS_ARGS_hip_distance_map_correctness_test 32 32 1)
+  set(HIP_CORRECTNESS_ARGS_hip_fast_marching_correctness_test 48 48 30 1)
+  set(HIP_CORRECTNESS_ARGS_hip_fft_correctness_test 30 24 1)
+  set(HIP_CORRECTNESS_ARGS_hip_image_feature_correctness_test 32 32)
+  set(HIP_CORRECTNESS_ARGS_hip_image_fusion_correctness_test 32 32)
+  set(HIP_CORRECTNESS_ARGS_hip_image_label_correctness_test 32 32)
+  set(HIP_CORRECTNESS_ARGS_hip_label_map_correctness_test 32 32)
+  set(HIP_CORRECTNESS_ARGS_hip_mathematical_morphology_correctness_test 32 32)
+
+  foreach(test_target IN LISTS HIP_CORRECTNESS_TARGETS)
+    add_test(NAME correctness.${test_target}
+      COMMAND $<TARGET_FILE:${test_target}> ${HIP_CORRECTNESS_ARGS_${test_target}})
+    set_tests_properties(correctness.${test_target} PROPERTIES
+      LABELS "correctness;hip"
+      SKIP_REGULAR_EXPRESSION "HIP device is not available; skipping"
+      TIMEOUT 600
+    )
+  endforeach()
+
+  foreach(module_case IN ITEMS image_filter_base image_gradient image_grid image_noise)
+    add_test(NAME correctness.hip_${module_case}_module
+      COMMAND $<TARGET_FILE:hip_uncovered_modules_correctness_test> ${module_case})
+    set_tests_properties(correctness.hip_${module_case}_module PROPERTIES
+      LABELS "correctness;backend;hip"
+      ENVIRONMENT "ITK_HIP_TRACE=1;ITK_HIP_FORBID_FALLBACK=1"
+      SKIP_REGULAR_EXPRESSION "HIP device is not available; skipping"
+      TIMEOUT 600
+    )
+  endforeach()
+
+  set_tests_properties(
+    correctness.hip_anisotropic_smoothing_test
+    correctness.hip_colormap_test
+    correctness.hip_deconvolution_correctness_test
+    correctness.hip_fft_correctness_test
+    correctness.hip_stage5_fft_pipeline_test
+    correctness.hip_stage5_intensity_mapping_test
+    correctness.hip_stage5_intensity_extended_test
+    correctness.hip_stage5_intensity_structured_test
+    correctness.hip_stage5_grid_pad_test
+    correctness.hip_stage5_grid_orient_test
+    correctness.hip_stage5_feature_composite_test
+    correctness.hip_stage5_labelmap_objects_test
+    correctness.hip_stage5_path_contour_test
+    correctness.hip_stage5_n4_test
+    PROPERTIES
+      LABELS "correctness;backend;hip"
+      ENVIRONMENT "ITK_HIP_TRACE=1;ITK_HIP_FORBID_FALLBACK=1"
+  )
+  set_tests_properties(correctness.hip_cpu_fallback_backend_test PROPERTIES
+    LABELS "correctness;backend;hip"
+    ENVIRONMENT "ITK_HIP_TRACE=1"
+  )
+
+  add_test(NAME phase3.common_foundation COMMAND $<TARGET_FILE:hip_phase3_common_test>)
+  set_tests_properties(phase3.common_foundation PROPERTIES
+    LABELS "phase3;correctness;backend;hip"
+    ENVIRONMENT "ITK_HIP_TRACE=1;ITK_HIP_FORBID_FALLBACK=1"
+    SKIP_REGULAR_EXPRESSION "HIP device is not available; skipping"
+    TIMEOUT 600
+  )
+
+  add_test(NAME phase3.algorithm_primitives COMMAND $<TARGET_FILE:hip_phase3_algorithms_test>)
+  add_test(NAME phase4.p0_native_paths COMMAND $<TARGET_FILE:hip_phase4_p0_test>)
+  set_tests_properties(phase3.algorithm_primitives PROPERTIES
+    LABELS "phase3;correctness;backend;hip"
+    ENVIRONMENT "ITK_HIP_TRACE=1;ITK_HIP_FORBID_FALLBACK=1"
+    SKIP_REGULAR_EXPRESSION "HIP device is not available; skipping"
+    TIMEOUT 600
+  )
+  set_tests_properties(phase4.p0_native_paths PROPERTIES
+    LABELS "phase4;correctness;backend;hip"
+    ENVIRONMENT "ITK_HIP_TRACE=1;ITK_HIP_FORBID_FALLBACK=1"
+    SKIP_REGULAR_EXPRESSION "HIP device is not available; skipping"
+    TIMEOUT 600
+  )
+
+  add_test(NAME backend.hip_fft_direct_trace
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/scripts/phase2_verify_hipprof_trace.sh
+      $<TARGET_FILE:hip_fft_benchmark>
+      ${CMAKE_BINARY_DIR}/backend-traces/hip_fft_direct
+      hipModuleLaunchKernel
+      1
+      30 24 1
+  )
+  set_tests_properties(backend.hip_fft_direct_trace PROPERTIES
+    LABELS "backend;hip;direct_trace"
+    TIMEOUT 600
+  )
+endif()
+
+if(BUILD_TESTING AND ITK_HIP_STAGE6_REGISTRATION)
+  if(NOT IS_DIRECTORY "${ITK_HIP_SOURCE_ROOT}/Modules/Filtering")
+    message(FATAL_ERROR "ITK_HIP_SOURCE_ROOT must point to the authoritative ITK source tree")
+  endif()
+  find_package(Python3 REQUIRED COMPONENTS Interpreter)
+  add_test(NAME stage7.acceptance_contract
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/validate_stage7_acceptance.py
+      --source-root ${ITK_HIP_SOURCE_ROOT}
+      --test-root ${CMAKE_CURRENT_SOURCE_DIR}
+      --build-dir ${CMAKE_BINARY_DIR}
+      --module-map ${CMAKE_CURRENT_SOURCE_DIR}/test/Filtering/module-test-map.tsv
+      --native-map ${CMAKE_CURRENT_SOURCE_DIR}/test/Filtering/native-filter-test-map.tsv
+      --promotions ${CMAKE_CURRENT_SOURCE_DIR}/test/Filtering/filter-promotions.tsv
+      --exceptions ${CMAKE_CURRENT_SOURCE_DIR}/test/Filtering/filter-exceptions.tsv)
+  set_tests_properties(stage7.acceptance_contract PROPERTIES
+    LABELS "stage7;smoke"
+    TIMEOUT 120)
+
+  add_test(NAME backend.stage7_memory_soak
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/scripts/run_stage7_memory_soak.sh
+      ${CMAKE_BINARY_DIR}/stage7-memory
+      $<TARGET_FILE:hip_stage5_fft_pipeline_test>
+      $<TARGET_FILE:hip_stage5_feature_composite_test>
+      $<TARGET_FILE:hip_phase4_p0_test>)
+  set_tests_properties(backend.stage7_memory_soak PROPERTIES
+    LABELS "stage7;backend;hip;slow;soak"
+    ENVIRONMENT "ITK_HIP_TRACE=1;ITK_HIP_FORBID_FALLBACK=1;STAGE7_SOAK_ITERATIONS=3"
+    SKIP_REGULAR_EXPRESSION "HIP device is not available; skipping"
+    TIMEOUT 1800)
+endif()
+
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/HipTest.cmake)
+
+if(BUILD_TESTING AND ITK_HIP_STAGE6_REGISTRATION)
+  set(HIP_CORRECTNESS_TARGETS
+    hip_smoothing_test
+    hip_anisotropic_smoothing_test
+    hip_antialias_test
+    hip_image_intensity_test
+    hip_image_intensity_all_filters_test
+    hip_thresholding_test
+    hip_image_sources_test
+    hip_colormap_test
+    hip_image_compose_test
+    hip_image_statistics_test
+    hip_image_compare_test
+    hip_cpu_fallback_backend_test
+    hip_convolution_fp32_compare
+    hip_mixed_precision_test
+    hip_convolution_template_test
+    hip_image_frequency_test
+    hip_curvature_flow_correctness_test
+    hip_deconvolution_correctness_test
+    hip_denoising_correctness_test
+    hip_diffusion_tensor_image_correctness_test
+    hip_displacement_field_correctness_test
+    hip_distance_map_correctness_test
+    hip_fast_marching_correctness_test
+    hip_fft_correctness_test
+    hip_image_feature_correctness_test
+    hip_image_fusion_correctness_test
+    hip_image_label_correctness_test
+    hip_label_map_correctness_test
+    hip_mathematical_morphology_correctness_test
+    hip_stage5_fft_pipeline_test
+    hip_stage5_intensity_mapping_test
+    hip_stage5_intensity_extended_test
+    hip_stage5_intensity_structured_test
+    hip_stage5_grid_pad_test
+    hip_stage5_grid_orient_test
+    hip_stage5_feature_composite_test
+    hip_stage5_labelmap_objects_test
+    hip_stage5_path_contour_test
+    hip_stage5_n4_test)
+  add_custom_target(hip_correctness_tests DEPENDS
+    ${HIP_CORRECTNESS_TARGETS}
+    hip_uncovered_modules_correctness_test
+    hip_phase3_common_test
+    hip_phase3_algorithms_test
+    hip_phase4_p0_test)
+
+  hip_register_case(NAME hip_smoothing_test TARGET hip_smoothing_test MODULES Smoothing STRICT)
+  hip_register_case(NAME hip_anisotropic_smoothing_test TARGET hip_anisotropic_smoothing_test MODULES AnisotropicSmoothing STRICT)
+  hip_register_case(NAME hip_antialias_test TARGET hip_antialias_test MODULES AntiAlias STRICT)
+  hip_register_case(NAME hip_image_intensity_test TARGET hip_image_intensity_test MODULES ImageIntensity STRICT)
+  hip_register_case(NAME hip_image_intensity_all_filters_test TARGET hip_image_intensity_all_filters_test MODULES ImageIntensity SLOW LABELS compile_contract)
+  hip_register_case(NAME hip_thresholding_test TARGET hip_thresholding_test MODULES Thresholding STRICT)
+  hip_register_case(NAME hip_image_sources_test TARGET hip_image_sources_test MODULES ImageSources STRICT)
+  hip_register_case(NAME hip_colormap_test TARGET hip_colormap_test MODULES Colormap STRICT)
+  hip_register_case(NAME hip_image_compose_test TARGET hip_image_compose_test MODULES ImageCompose STRICT)
+  hip_register_case(NAME hip_image_statistics_test TARGET hip_image_statistics_test MODULES ImageStatistics STRICT)
+  hip_register_case(NAME hip_image_compare_test TARGET hip_image_compare_test MODULES ImageCompare STRICT)
+  hip_register_case(NAME hip_cpu_fallback_backend_test TARGET hip_cpu_fallback_backend_test MODULES ImageFilterBase LABELS fallback_contract)
+  hip_register_case(NAME hip_convolution_fp32_compare TARGET hip_convolution_fp32_compare MODULES Convolution STRICT)
+  hip_register_case(NAME hip_mixed_precision_test TARGET hip_mixed_precision_test MODULES Convolution Smoothing ImageIntensity STRICT SMOKE)
+  hip_register_case(NAME hip_convolution_template_test TARGET hip_convolution_template_test MODULES Convolution STRICT)
+  hip_register_case(NAME hip_image_frequency_test TARGET hip_image_frequency_test MODULES ImageFrequency STRICT)
+  hip_register_case(NAME hip_curvature_flow_correctness_test TARGET hip_curvature_flow_correctness_test MODULES CurvatureFlow ARGS 32 32 STRICT)
+  hip_register_case(NAME hip_deconvolution_correctness_test TARGET hip_deconvolution_correctness_test MODULES Deconvolution ARGS 24 24 STRICT SLOW)
+  hip_register_case(NAME hip_denoising_correctness_test TARGET hip_denoising_correctness_test MODULES Denoising ARGS 24 24 STRICT SLOW)
+  hip_register_case(NAME hip_diffusion_tensor_image_correctness_test TARGET hip_diffusion_tensor_image_correctness_test MODULES DiffusionTensorImage ARGS 16 16 1 STRICT)
+  hip_register_case(NAME hip_displacement_field_correctness_test TARGET hip_displacement_field_correctness_test MODULES DisplacementField ARGS 24 20 1 STRICT SLOW)
+  hip_register_case(NAME hip_distance_map_correctness_test TARGET hip_distance_map_correctness_test MODULES DistanceMap ARGS 32 32 1 STRICT)
+  hip_register_case(NAME hip_fast_marching_correctness_test TARGET hip_fast_marching_correctness_test MODULES FastMarching ARGS 48 48 30 1 STRICT)
+  hip_register_case(NAME hip_fft_correctness_test TARGET hip_fft_correctness_test MODULES FFT ARGS 30 24 1 STRICT)
+  hip_register_case(NAME hip_image_feature_correctness_test TARGET hip_image_feature_correctness_test MODULES ImageFeature ARGS 32 32 STRICT SLOW)
+  hip_register_case(NAME hip_image_fusion_correctness_test TARGET hip_image_fusion_correctness_test MODULES ImageFusion ARGS 32 32 STRICT)
+  hip_register_case(NAME hip_image_label_correctness_test TARGET hip_image_label_correctness_test MODULES ImageLabel ARGS 32 32 STRICT)
+  hip_register_case(NAME hip_label_map_correctness_test TARGET hip_label_map_correctness_test MODULES LabelMap ARGS 32 32 STRICT)
+  hip_register_case(NAME hip_mathematical_morphology_correctness_test TARGET hip_mathematical_morphology_correctness_test MODULES MathematicalMorphology ARGS 32 32 STRICT SLOW)
+  hip_register_case(NAME hip_stage5_fft_pipeline_test TARGET hip_stage5_fft_pipeline_test MODULES Convolution FFT Smoothing STRICT SMOKE)
+  hip_register_case(NAME hip_stage5_intensity_mapping_test TARGET hip_stage5_intensity_mapping_test MODULES ImageIntensity STRICT)
+  hip_register_case(NAME hip_stage5_intensity_extended_test TARGET hip_stage5_intensity_extended_test MODULES ImageIntensity STRICT)
+  hip_register_case(NAME hip_stage5_intensity_structured_test TARGET hip_stage5_intensity_structured_test MODULES ImageIntensity STRICT SMOKE)
+  hip_register_case(NAME hip_stage5_grid_pad_test TARGET hip_stage5_grid_pad_test MODULES ImageGrid STRICT SMOKE)
+  hip_register_case(NAME hip_remaining8_real_test TARGET hip_remaining8_real_test MODULES ImageGrid ImageIntensity STRICT SMOKE)
+  hip_register_case(NAME hip_stage5_grid_orient_test TARGET hip_stage5_grid_orient_test MODULES ImageGrid STRICT)
+  hip_register_case(NAME hip_stage5_feature_composite_test TARGET hip_stage5_feature_composite_test MODULES ImageFeature STRICT SMOKE SLOW)
+  hip_register_case(NAME hip_stage5_labelmap_objects_test TARGET hip_stage5_labelmap_objects_test MODULES LabelMap STRICT SMOKE)
+  hip_register_case(NAME hip_stage5_path_contour_test TARGET hip_stage5_path_contour_test MODULES Path STRICT SMOKE)
+  hip_register_case(NAME hip_stage5_n4_test TARGET hip_stage5_n4_test MODULES BiasCorrection ImageGrid STRICT SMOKE)
+
+  hip_register_case(NAME hip_image_filter_base_module TARGET hip_uncovered_modules_correctness_test MODULES ImageFilterBase ARGS image_filter_base STRICT SMOKE)
+  hip_register_case(NAME hip_image_gradient_module TARGET hip_uncovered_modules_correctness_test MODULES ImageGradient ARGS image_gradient STRICT SMOKE)
+  hip_register_case(NAME hip_image_grid_module TARGET hip_uncovered_modules_correctness_test MODULES ImageGrid ARGS image_grid STRICT SMOKE)
+  hip_register_case(NAME hip_image_noise_module TARGET hip_uncovered_modules_correctness_test MODULES ImageNoise ARGS image_noise STRICT SMOKE)
+
+  hip_register_case(NAME phase3.common_foundation TARGET hip_phase3_common_test MODULES ImageFilterBase STRICT)
+  hip_register_case(NAME phase3.algorithm_primitives TARGET hip_phase3_algorithms_test MODULES ImageFilterBase STRICT)
+  hip_register_case(NAME phase4.p0_native_paths TARGET hip_phase4_p0_test
+    MODULES BinaryMathematicalMorphology DistanceMap ImageFeature ImageFrequency Smoothing Thresholding
+    STRICT SMOKE SLOW)
+
+  add_test(NAME backend.hip_fft_direct_trace
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/scripts/phase2_verify_hipprof_trace.sh
+      $<TARGET_FILE:hip_fft_benchmark>
+      ${CMAKE_BINARY_DIR}/backend-traces/hip_fft_direct
+      hipModuleLaunchKernel 1 30 24 1)
+  set_tests_properties(backend.hip_fft_direct_trace PROPERTIES
+    LABELS "backend;hip;direct_trace;module_fft"
+    TIMEOUT 600)
+
+  find_package(Python3 REQUIRED COMPONENTS Interpreter)
+  add_test(NAME stage6.manifest_contract
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/validate_stage6_manifest.py
+      --build-dir ${CMAKE_BINARY_DIR}
+      --module-map ${CMAKE_CURRENT_SOURCE_DIR}/test/Filtering/module-test-map.tsv
+      --native-map ${CMAKE_CURRENT_SOURCE_DIR}/test/Filtering/native-filter-test-map.tsv)
+  set_tests_properties(stage6.manifest_contract PROPERTIES LABELS "stage6;smoke" TIMEOUT 60)
+
+  hip_register_benchmark(NAME hip_smoothing_benchmark TARGET hip_smoothing_benchmark CORRECTNESS_TARGET hip_smoothing_test MODULES Smoothing ARGS 128 128 3)
+  hip_register_benchmark(NAME hip_anisotropic_smoothing_benchmark TARGET hip_anisotropic_smoothing_benchmark CORRECTNESS_TARGET hip_anisotropic_smoothing_test MODULES AnisotropicSmoothing ARGS 64 64 2)
+  hip_register_benchmark(NAME hip_antialias_benchmark TARGET hip_antialias_benchmark CORRECTNESS_TARGET hip_antialias_test MODULES AntiAlias ARGS 64 64 2 10)
+  hip_register_benchmark(NAME hip_image_intensity_benchmark TARGET hip_image_intensity_benchmark CORRECTNESS_TARGET hip_image_intensity_test MODULES ImageIntensity ARGS 128 128 3)
+  hip_register_benchmark(NAME hip_thresholding_benchmark TARGET hip_thresholding_benchmark CORRECTNESS_TARGET hip_thresholding_test MODULES Thresholding ARGS 128 128 3)
+  hip_register_benchmark(NAME hip_image_sources_benchmark TARGET hip_image_sources_benchmark CORRECTNESS_TARGET hip_image_sources_test MODULES ImageSources ARGS 128 128 3)
+  hip_register_benchmark(NAME hip_colormap_benchmark TARGET hip_colormap_benchmark CORRECTNESS_TARGET hip_colormap_test MODULES Colormap ARGS 128 128 3)
+  hip_register_benchmark(NAME hip_image_compose_benchmark TARGET hip_image_compose_benchmark CORRECTNESS_TARGET hip_image_compose_test MODULES ImageCompose ARGS 128 128 3)
+  hip_register_benchmark(NAME hip_image_statistics_benchmark TARGET hip_image_statistics_benchmark CORRECTNESS_TARGET hip_image_statistics_test MODULES ImageStatistics ARGS 64 64 2 16)
+  hip_register_benchmark(NAME hip_image_compare_benchmark TARGET hip_image_compare_benchmark CORRECTNESS_TARGET hip_image_compare_test MODULES ImageCompare ARGS 128 128 3)
+  hip_register_benchmark(NAME hip_convolution_benchmark TARGET hip_convolution_benchmark CORRECTNESS_TARGET hip_convolution_fp32_compare MODULES Convolution ARGS 32 32)
+  hip_register_benchmark(NAME hip_curvature_flow_benchmark TARGET hip_curvature_flow_benchmark CORRECTNESS_TARGET hip_curvature_flow_correctness_test MODULES CurvatureFlow CORRECTNESS_ARGS 32 32 ARGS 32 32)
+  hip_register_benchmark(NAME hip_deconvolution_benchmark TARGET hip_deconvolution_benchmark CORRECTNESS_TARGET hip_deconvolution_correctness_test MODULES Deconvolution CORRECTNESS_ARGS 24 24 ARGS 24 24 SLOW)
+  hip_register_benchmark(NAME hip_denoising_benchmark TARGET hip_denoising_benchmark CORRECTNESS_TARGET hip_denoising_correctness_test MODULES Denoising CORRECTNESS_ARGS 24 24 ARGS 24 24 SLOW)
+  hip_register_benchmark(NAME hip_diffusion_tensor_image_benchmark TARGET hip_diffusion_tensor_image_benchmark CORRECTNESS_TARGET hip_diffusion_tensor_image_correctness_test MODULES DiffusionTensorImage CORRECTNESS_ARGS 16 16 1 ARGS 16 16 1)
+  hip_register_benchmark(NAME hip_displacement_field_benchmark TARGET hip_displacement_field_benchmark CORRECTNESS_TARGET hip_displacement_field_correctness_test MODULES DisplacementField CORRECTNESS_ARGS 24 20 1 ARGS 24 20 1 SLOW)
+  hip_register_benchmark(NAME hip_distance_map_benchmark TARGET hip_distance_map_benchmark CORRECTNESS_TARGET hip_distance_map_correctness_test MODULES DistanceMap CORRECTNESS_ARGS 32 32 1 ARGS 32 32 1)
+  hip_register_benchmark(NAME hip_fast_marching_benchmark TARGET hip_fast_marching_benchmark CORRECTNESS_TARGET hip_fast_marching_correctness_test MODULES FastMarching CORRECTNESS_ARGS 48 48 30 1 ARGS 48 48 30 1)
+  hip_register_benchmark(NAME hip_fft_benchmark TARGET hip_fft_benchmark CORRECTNESS_TARGET hip_fft_correctness_test MODULES FFT CORRECTNESS_ARGS 30 24 1 ARGS 30 24 1)
+  hip_register_benchmark(NAME hip_image_fusion_benchmark TARGET hip_image_fusion_benchmark CORRECTNESS_TARGET hip_image_fusion_correctness_test MODULES ImageFusion CORRECTNESS_ARGS 32 32 ARGS 32 32)
+  hip_register_benchmark(NAME hip_image_feature_benchmark TARGET hip_image_feature_benchmark CORRECTNESS_TARGET hip_stage5_feature_composite_test MODULES ImageFeature ARGS 32 32 SLOW)
+  hip_register_benchmark(NAME hip_image_label_benchmark TARGET hip_image_label_benchmark CORRECTNESS_TARGET hip_image_label_correctness_test MODULES ImageLabel CORRECTNESS_ARGS 32 32 ARGS 32 32)
+  hip_register_benchmark(NAME hip_label_map_benchmark TARGET hip_label_map_benchmark CORRECTNESS_TARGET hip_stage5_labelmap_objects_test MODULES LabelMap ARGS 32 32)
+  hip_register_benchmark(NAME hip_mathematical_morphology_benchmark TARGET hip_mathematical_morphology_benchmark CORRECTNESS_TARGET hip_mathematical_morphology_correctness_test MODULES MathematicalMorphology CORRECTNESS_ARGS 32 32 ARGS 32 32 SLOW)
+  hip_register_benchmark(NAME hip_frequency_band_benchmark TARGET hip_frequency_band_benchmark CORRECTNESS_TARGET hip_image_frequency_test MODULES ImageFrequency ARGS 32 32)
+endif()
