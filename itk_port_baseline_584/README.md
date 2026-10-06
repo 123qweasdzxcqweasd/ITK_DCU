@@ -55,3 +55,20 @@ python3 scripts/collect_baseline_metrics.py \
 
 正式验收时必须保留 `target-status.tsv`、全部日志、清单、数据清单、
 DCU 型号、DTK 版本和 CMake 日志。
+
+## ARM 对齐复测入口
+
+上述基线入口保留原有的 OFF 版定义。若要按 ARM
+`lingsheng592` 的输入和 float/double 测试策略复测全部 584 个函数，
+使用上级目录的统一入口：
+
+```bash
+bash ../scripts/run_arm_aligned_584.sh
+python3 ../scripts/collect_arm_aligned_metrics.py \
+  "$ROOT/results/arm_aligned_584" \
+  "$ROOT/results/arm_aligned_584/arm_aligned_584_summary.csv"
+```
+
+对应清单是 `../manifests/itk_arm_aligned_584.tsv`。该入口使用预热 1 次、
+正式测量 3 次，并单独记录 ARM 对齐的 `double_ms/float_ms` 与 DCU OFF/ON
+收益；不能用其中一个指标替代另一个。

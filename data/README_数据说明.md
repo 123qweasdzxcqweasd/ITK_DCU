@@ -86,6 +86,22 @@ python3 scripts/verify_dcu_dataset.py data
 `internal_deterministic:<生成器或测试程序名>`，并在结果中保留生成参数、
 尺寸、迭代次数、固定 seed（如适用）和程序版本。
 
+## 7. ARM 对齐清单
+
+全部 584 个函数的 ARM 对齐输入分类记录在
+`../manifests/itk_arm_aligned_584.tsv`。该清单把每个函数映射到二维主测图、
+配准固定/移动图、标签/二值图或对应的固定生成对象。运行前可用：
+
+```bash
+python3 ../scripts/verify_arm_alignment.py \
+  /path/to/ITK_ECNU/ITK_ECNU/test/data \
+  /path/to/ITK_DCU/data
+```
+
+校验输出中的每一项必须为 `MATCH`，才能确认 DCU 的共用图像和 ARM 来源
+完全一致。`run_arm_aligned_584.sh` 会把 `dataset_manifest.tsv` 和
+`alignment_report.tsv` 复制到结果目录，便于外部复核。
+
 ## 5. 现有 MHA/CSV 文件的定位
 
 本目录的 `dcu_legacy/` 以及根目录兼容路径保留

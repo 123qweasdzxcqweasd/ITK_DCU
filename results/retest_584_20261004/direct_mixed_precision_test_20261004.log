@@ -1,0 +1,3 @@
+get hyhal driver version error, open file(/sys/module/hydcu/version and /sys/module/amdgpu/version) error, skip init hydmi
+Could not open /var/log/hylog/.
+HIP device is not available; skipping mixed precision test.

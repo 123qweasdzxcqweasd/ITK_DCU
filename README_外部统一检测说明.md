@@ -258,6 +258,34 @@ python3 scripts/collect_unified_metrics.py \
 - OFF/ON 时间样本齐全；
 - 误差使用该函数所属 profile 的阈值，而不是对所有函数机械使用同一个阈值。
 
+## 5. 全部 584 个函数的 ARM 对齐复测
+
+如果送测范围是全部 584 个函数，使用根目录的
+`scripts/run_arm_aligned_584.sh`，不要把历史 285 函数包的结果直接当作
+584 函数结果。该入口使用
+`manifests/itk_arm_aligned_584.tsv` 中逐函数登记的输入契约：
+
+- 2D 标量函数使用官方脑部图像生成的 1024×1024 标准图；
+- 配准函数使用固定图和移动图；
+- 标签、二值、复数、点集、网格和水平集函数使用对应的固定生成数据；
+- 同一输入测试 float 和 double，预热 1 次、正式测量 3 次；
+- `double_ms / float_ms` 是 ARM 对齐精度对比的加速比；
+- DCU OFF/ON 时间和 `OFF / ON` 是 DCU 混合精度收益，单独存储；
+- 连续图像使用 `max_abs`，对象类函数使用清单指定的领域指标。
+
+benchmark 如需向汇总器提供独立函数结果，应输出：
+
+```text
+ARM_ALIGNED_METRIC function=<name> input_source=<source> \
+dimensions=<shape> pixel_type=<type> float_ms=<ms> \
+double_ms=<ms> speedup=<double/float> max_abs=<value>
+```
+
+可复核资料包括 584 条清单、原始日志、`protocol.tsv`、
+`target-status.tsv`、`dataset_manifest.tsv`、`alignment_report.tsv` 和
+汇总 CSV。当前工作簿中的历史数据不因新增入口自动改写，必须在实际复测
+完成后再将新结果回填。
+
 ## 5. 需要外部检测单位回传的文件
 
 至少回传：

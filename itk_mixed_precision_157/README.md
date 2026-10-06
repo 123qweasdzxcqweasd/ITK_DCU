@@ -63,6 +63,12 @@ python3 scripts/collect_mixed_precision_157.py \
 汇总中的 `mixed_speedup` 定义为 `OFF DCU 时间 / ON DCU 时间`，
 `mixed_error` 使用 ON 运行输出的统一误差字段。
 
+本目录仍然是历史筛选出的 157 个函数送测包。它不改变全部 584 个函数的
+ARM 对齐测试范围；若需要与 ARM `lingsheng592` 逐函数对齐，应使用上级
+目录的 `scripts/run_arm_aligned_584.sh` 和
+`manifests/itk_arm_aligned_584.tsv`，再根据清单中的对象类型和输入契约
+汇总结果。
+
 `manifests/itk_mixed_precision_157.tsv` 的 `data_source` 是送测输入契约：
 `internal_deterministic` 表示按清单固定公式、类型、尺寸和参数生成，
 `package_file:<文件名>` 表示读取随包文件。不同输入源的结果分别汇总。
