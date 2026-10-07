@@ -17,6 +17,7 @@
 
 - `../manifests/itk_arm_aligned_584.tsv`：584 个函数的输入和指标契约；
 - `run_arm_aligned_584.sh`：预热 1 次、正式测量 3 次，分别测试 float/double；
+- `submit_arm_aligned_584_array.sh`：将 95 个测试入口分成 8 个 DCU 任务并行运行；
 - `collect_arm_aligned_metrics.py`：汇总 `double_ms/float_ms`、误差和 DCU OFF/ON 字段；
 - `verify_arm_alignment.py`：校验 ARM 来源图像与 DCU `data/common/` 的 SHA-256。
 

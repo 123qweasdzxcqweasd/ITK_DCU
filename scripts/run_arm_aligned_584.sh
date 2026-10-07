@@ -13,12 +13,12 @@ RUNS="${RUNS:-3}"
 WARMUPS="${WARMUPS:-1}"
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-900}"
 BENCH_ARGS_MODE="${BENCH_ARGS_MODE:-none}"
+RUN_MODES="${RUN_MODES:-off on}"
+RUN_MODES="${RUN_MODES//,/ }"
 
 export PATH="/public/software/compiler/dtk-24.04.3/bin:/public/software/compiler/dtk-24.04.3/llvm/bin:/public/software/compiler/dtk-24.04.3/hip/bin:/opt/hyhal/bin:$PATH"
 export LD_LIBRARY_PATH="$ROOT/build-phase2/itk-gcc/lib:/public/software/compiler/dtk-24.04.3/lib64:/public/software/compiler/dtk-24.04.3/lib:/public/software/compiler/dtk-24.04.3/hip/lib:/public/software/compiler/dtk-24.04.3/hsa/lib:/public/software/compiler/dtk-24.04.3/.hyhal/lib:/public/software/compiler/dtk-24.04.3/.hyhal/hsa/lib:${LD_LIBRARY_PATH:-}"
 export ITK_HIP_FORBID_FALLBACK=1
-export ITK_HIP_PRECISION_MODE=default
-export ITK_HIP_MIXED_PRECISION=0
 export ITK_BENCH_PRECISION=both
 export ITK_BENCH_WARMUPS="$WARMUPS"
 export ITK_BENCH_RUNS="$RUNS"
@@ -41,35 +41,47 @@ if [[ -f "$DATA_ROOT/alignment_report.tsv" ]]; then
 fi
 printf 'protocol\tARM-aligned float_vs_double\nscope\t584 functions\nwarmups\t%s\nmeasured_runs\t%s\ninput_root\t%s\nhost\t%s\n' \
   "$WARMUPS" "$RUNS" "$DATA_ROOT" "$(hostname)" > "$RESULT_ROOT/protocol.tsv"
-printf 'executable\tstatus\texit_code\tseconds\tlog\n' > "$RESULT_ROOT/target-status.tsv"
+printf 'executable\tprecision_mode\tstatus\texit_code\tseconds\tlog\n' > "$RESULT_ROOT/target-status.tsv"
 
 while IFS=$'\t' read -r executable; do
   [[ -n "$executable" ]] || continue
-  log="$RESULT_ROOT/logs/${executable}.log"
   if [[ ! -x "$TEST_BUILD/$executable" ]]; then
-    printf '%s\tNOT_BUILT\t127\t0\t%s\n' "$executable" "$log" >> "$RESULT_ROOT/target-status.tsv"
-    printf 'MISSING_EXECUTABLE %s\n' "$TEST_BUILD/$executable" > "$log"
+    for mode in $RUN_MODES; do
+      log="$RESULT_ROOT/logs/${executable}_${mode}.log"
+      printf '%s\t%s\tNOT_BUILT\t127\t0\t%s\n' "$executable" "$mode" "$log" >> "$RESULT_ROOT/target-status.tsv"
+      printf 'MISSING_EXECUTABLE %s\n' "$TEST_BUILD/$executable" > "$log"
+    done
     continue
   fi
 
-  start=$(date +%s)
-  if [[ "$BENCH_ARGS_MODE" == "image" ]]; then
-    timeout "$TIMEOUT_SECONDS" "$TEST_BUILD/$executable" "$DATA_ROOT/BrainProtonDensity1024.png" "$RUNS" > "$log" 2>&1
-  else
-    timeout "$TIMEOUT_SECONDS" "$TEST_BUILD/$executable" > "$log" 2>&1
-  fi
-  rc=$?
-  elapsed=$(( $(date +%s) - start ))
-  if grep -Eq 'CPU fallback|CPU_FALLBACK|FALLBACK_USED|NO_DCU_BACKEND' "$log"; then
-    status=FALLBACK_OR_FORBIDDEN
-  elif [[ "$rc" -eq 0 ]]; then
-    status=PASS
-  elif [[ "$rc" -eq 124 ]]; then
-    status=TIMEOUT
-  else
-    status=FAIL
-  fi
-  printf '%s\t%s\t%s\t%s\t%s\n' "$executable" "$status" "$rc" "$elapsed" "$log" >> "$RESULT_ROOT/target-status.tsv"
+  for mode in $RUN_MODES; do
+    if [[ "$mode" == "on" ]]; then
+      export ITK_HIP_PRECISION_MODE=fp32_fp64
+      export ITK_HIP_MIXED_PRECISION=1
+    else
+      export ITK_HIP_PRECISION_MODE=default
+      export ITK_HIP_MIXED_PRECISION=0
+    fi
+    log="$RESULT_ROOT/logs/${executable}_${mode}.log"
+    start=$(date +%s)
+    if [[ "$BENCH_ARGS_MODE" == "image" ]]; then
+      timeout "$TIMEOUT_SECONDS" "$TEST_BUILD/$executable" "$DATA_ROOT/BrainProtonDensity1024.png" "$RUNS" > "$log" 2>&1
+    else
+      timeout "$TIMEOUT_SECONDS" "$TEST_BUILD/$executable" > "$log" 2>&1
+    fi
+    rc=$?
+    elapsed=$(( $(date +%s) - start ))
+    if grep -Eq 'CPU fallback|CPU_FALLBACK|FALLBACK_USED|NO_DCU_BACKEND' "$log"; then
+      status=FALLBACK_OR_FORBIDDEN
+    elif [[ "$rc" -eq 0 ]]; then
+      status=PASS
+    elif [[ "$rc" -eq 124 ]]; then
+      status=TIMEOUT
+    else
+      status=FAIL
+    fi
+    printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$executable" "$mode" "$status" "$rc" "$elapsed" "$log" >> "$RESULT_ROOT/target-status.tsv"
+  done
 done < <(tail -n +2 "$INVENTORY")
 
 echo "ARM_ALIGNED_RUN_COMPLETE,$RESULT_ROOT"
